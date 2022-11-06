@@ -1,5 +1,5 @@
 #!/bin/sh
-pacman -Syu --noconfirm base-devel sudo git jq curl unzip
+pacman -Syu --noconfirm base-devel sudo git jq curl unzip schedtool
 curl -sLJO -H 'Accept: application/octet-stream' \
 "https://$GITHUB_TOKEN@api.github.com/repos/mtak-misc/pkgbuild-llvm-git/releases/assets/$( \
 curl -sL https://$GITHUB_TOKEN@api.github.com/repos/mtak-misc/pkgbuild-llvm-git/releases/tags/test \
