@@ -1,0 +1,42 @@
+name: build-action
+
+on:
+  workflow_dispatch:
+
+env:
+  PKGDEST: "/tmp"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 13
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Check out linux-tkg repository
+        uses: actions/checkout@v3
+        with:
+          repository: Frogging-Family/linux-tkg
+          path: linux-tkg
+      - name: Check out CachyOS kernel-patches repository
+        uses: actions/checkout@v3
+        with:
+          repository: CachyOS/kernel-patches
+          path: kernel-patches
+      - name: Prepare for build
+        run: |
+           cd $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/6.0 ; /bin/bash $GITHUB_WORKSPACE/update-config.sh
+           mkdir $GITHUB_WORKSPACE/linux-tkg/linux60-tkg-userpatches
+           cp $GITHUB_WORKSPACE/kernel-patches/6.0/0002-bbr2.patch $GITHUB_WORKSPACE/linux-tkg/linux60-tkg-userpatches/0002-bbr2.mypatch
+           /usr/bin/sed -i 's/\"bbr\"/\"bbr2\"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
+           /usr/bin/sed -i 's/\"FUNCTION_GRAPH_TRACER\"/\"FUNCTION_GRAPH_TRACER\" \"STACK_TRACER\"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
+           cp $GITHUB_WORKSPACE/customization.cfg $GITHUB_WORKSPACE/linux-tkg/
+      - name: Build kernel
+        run: docker run -e GITHUB_TOKEN=${{ secrets.pat }} -v $GITHUB_WORKSPACE:/workspace archlinux:latest /bin/bash /workspace/build.sh ; cp $GITHUB_WORKSPACE/linux-tkg/*.pkg.tar.zst /tmp
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-tkg-pds-llvm
+          path: ${{ env.PKGDEST }}/*.pkg.tar.zst
