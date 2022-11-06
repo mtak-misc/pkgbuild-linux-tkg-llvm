@@ -34,9 +34,11 @@ jobs:
            /usr/bin/sed -i 's/"bbr"/"bbr2"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            /usr/bin/sed -i 's/"FUNCTION_GRAPH_TRACER"/"FUNCTION_GRAPH_TRACER" "STACK_TRACER"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            cp $GITHUB_WORKSPACE/customization.cfg $GITHUB_WORKSPACE/linux-tkg/
-      - name: Build kernel
-        run: docker run -e USERID=$(id -u $(whoami)) -e GITHUB_TOKEN=${{ secrets.pat }} -v $GITHUB_WORKSPACE:/workspace archlinux:latest /bin/bash /workspace/build.sh ; cp $GITHUB_WORKSPACE/linux-tkg/*.pkg.tar.zst /tmp
-      - uses: actions/upload-artifact@v3
-        with:
-          name: linux-tkg-pds-llvm
-          path: ${{ env.PKGDEST }}/*.pkg.tar.zst
+           grep bbr2 $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
+           grep FUNCTION_GRAPH_TRACER $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
+#      - name: Build kernel
+#        run: docker run -e USERID=$(id -u $(whoami)) -e GITHUB_TOKEN=${{ secrets.pat }} -v $GITHUB_WORKSPACE:/workspace archlinux:latest /bin/bash /workspace/build.sh ; cp $GITHUB_WORKSPACE/linux-tkg/*.pkg.tar.zst /tmp
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: linux-tkg-pds-llvm
+#          path: ${{ env.PKGDEST }}/*.pkg.tar.zst
