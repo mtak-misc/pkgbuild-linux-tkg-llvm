@@ -21,26 +21,28 @@ jobs:
         with:
           repository: Frogging-Family/linux-tkg
           path: linux-tkg
-#      - name: Check out CachyOS kernel-patches repository
-#        uses: actions/checkout@v3
-#        with:
-#          repository: CachyOS/kernel-patches
-#          path: kernel-patches
-      - name: Check out Xanmod linux-patches repository
+      - name: Check out CachyOS kernel-patches repository
         uses: actions/checkout@v3
         with:
-          repository:  xanmod/linux-patches 
-          path: linux-patches
+          repository: CachyOS/kernel-patches
+          path: kernel-patches
+#      - name: Check out Xanmod linux-patches repository
+#        uses: actions/checkout@v3
+#        with:
+#          repository:  xanmod/linux-patches 
+#          path: linux-patches
+#           cp $GITHUB_WORKSPACE/linux-patches/linux-6.0.y-xanmod/net/bbr2/* $GITHUB_WORKSPACE/linux-tkg/linux60-tkg-userpatches/
       - name: Prepare for build
         run: |
-           cd $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/6.0
+           cd $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/6.1
            /bin/bash $GITHUB_WORKSPACE/update-config.sh
-           mkdir $GITHUB_WORKSPACE/linux-tkg/linux60-tkg-userpatches
-           cp $GITHUB_WORKSPACE/linux-patches/linux-6.0.y-xanmod/net/bbr2/* $GITHUB_WORKSPACE/linux-tkg/linux60-tkg-userpatches/
-           cd $GITHUB_WORKSPACE/linux-tkg/linux60-tkg-userpatches
+           mkdir $GITHUB_WORKSPACE/linux-tkg/linux61-tkg-userpatches
+           cp $GITHUB_WORKSPACE/kernel-patches/6.1/0001-bbr2.patch $GITHUB_WORKSPACE/linux-tkg/linux61-tkg-userpatches/
+           cd $GITHUB_WORKSPACE/linux-tkg/linux61-tkg-userpatches
            /bin/bash $GITHUB_WORKSPACE/rename-patch.sh
            /usr/bin/sed -i 's/"bbr"/"bbr2"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            /usr/bin/sed -i 's/"FUNCTION_GRAPH_TRACER"/"FUNCTION_GRAPH_TRACER" "STACK_TRACER"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
+           /usr/bin/sed -i 's/_avail_cpu_scheds=("cfs" "tt" "bore")/_avail_cpu_scheds=("cfs" "pds" "bmq" "tt" "bore")g/' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            cp $GITHUB_WORKSPACE/customization.cfg $GITHUB_WORKSPACE/linux-tkg/
       - name: Build kernel
         run: docker run -e USERID=$(id -u $(whoami)) -e GITHUB_TOKEN=${{ secrets.pat }} -v $GITHUB_WORKSPACE:/workspace archlinux:latest /bin/bash /workspace/build.sh ; cp $GITHUB_WORKSPACE/linux-tkg/*.pkg.tar.zst /tmp
