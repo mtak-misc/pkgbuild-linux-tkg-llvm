@@ -39,7 +39,7 @@ jobs:
            /bin/bash $GITHUB_WORKSPACE/rename-patch.sh
            /usr/bin/sed -i 's/"bbr"/"bbr2"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            /usr/bin/sed -i 's/"FUNCTION_GRAPH_TRACER"/"FUNCTION_GRAPH_TRACER" "STACK_TRACER"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
-           cp $GITHUB_WORKSPACE/customization.cfg.gcc $GITHUB_WORKSPACE/linux-tkg/customization.cfg
+           cp $GITHUB_WORKSPACE/customization.cfg $GITHUB_WORKSPACE/linux-tkg/customization.cfg
       - name: Build kernel
         run: |
            docker run -e USERID=$(id -u $(whoami)) -e GITHUB_TOKEN=${{ secrets.pat }} -v $GITHUB_WORKSPACE:/workspace archlinux:latest /bin/bash /workspace/build.sh
