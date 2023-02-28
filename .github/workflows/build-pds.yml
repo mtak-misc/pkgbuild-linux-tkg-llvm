@@ -21,13 +21,13 @@ jobs:
       - name: Prepare for build
         run: |
            cd $GITHUB_WORKSPACE
-           git clone https://github.com/xanmod/linux-patches.git
            mkdir $GITHUB_WORKSPACE/linux-tkg/linux61-tkg-userpatches
            cd $GITHUB_WORKSPACE/linux-tkg/linux61-tkg-userpatches
            curl -LO https://raw.githubusercontent.com/Frogging-Family/community-patches/master/linux61-tkg/BBRv2.mypatch
            /usr/bin/sed -i 's/"bbr"/"bbr2"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            /usr/bin/sed -i 's/"FUNCTION_GRAPH_TRACER"/"FUNCTION_GRAPH_TRACER" "STACK_TRACER"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            cp $GITHUB_WORKSPACE/customization.cfg $GITHUB_WORKSPACE/linux-tkg/customization.cfg
+#           git clone https://github.com/xanmod/linux-patches.git
 #           mv $GITHUB_WORKSPACE/linux-patches/linux-6.2.y-xanmod/net/bbr2/*.* $GITHUB_WORKSPACE/linux-tkg/linux62-tkg-userpatches
 #           cd $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/6.1
 #           /bin/bash $GITHUB_WORKSPACE/update-config.sh
