@@ -18,7 +18,7 @@ jobs:
         with:
           repository: Frogging-Family/linux-tkg
           path: linux-tkg
-      - name: Check out linux-tkg repository
+      - name: Check out linux-patches repository
         uses: actions/checkout@v3
         with:
           repository: xanmod/linux-patches
