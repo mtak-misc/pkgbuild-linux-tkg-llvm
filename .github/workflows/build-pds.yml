@@ -38,7 +38,6 @@ jobs:
 #           curl -LO https://raw.githubusercontent.com/Frogging-Family/community-patches/master/linux61-tkg/BBRv2.mypatch
       - name: Build kernel
         run: |
-           grep -C 3 CONFIG_FEALNX $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/6.2/config.x86_64
            docker run -e USERID=$(id -u $(whoami)) -e GITHUB_TOKEN=${{ secrets.pat }} -v $GITHUB_WORKSPACE:/workspace archlinux:latest /bin/bash /workspace/build.sh
            cp $GITHUB_WORKSPACE/linux-tkg/*.pkg.tar.zst /tmp
       - uses: actions/upload-artifact@v3
