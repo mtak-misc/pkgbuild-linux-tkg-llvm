@@ -31,6 +31,7 @@ jobs:
            cd $GITHUB_WORKSPACE/linux-tkg/linux62-tkg-userpatches
            /bin/bash $GITHUB_WORKSPACE/rename-patches.sh
            cd $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/6.2
+           /bin/bash $GITHUB_WORKSPACE/update-config.sh
            /usr/bin/sed -i 's/"bbr"/"bbr2"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            /usr/bin/sed -i 's/"FUNCTION_GRAPH_TRACER"/"FUNCTION_GRAPH_TRACER" "STACK_TRACER"/g' $GITHUB_WORKSPACE/linux-tkg/linux-tkg-config/prepare
            cp $GITHUB_WORKSPACE/customization.cfg $GITHUB_WORKSPACE/linux-tkg/customization.cfg
